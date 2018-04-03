@@ -28,12 +28,12 @@ namespace LinQToObjects {
             HighlightedWriteLine("Assignment 1: Vsechny osoby, ktere nepovazuji nikoho za sveho pritele.");
             Console.WriteLine("Main: foreach:");
 
-            var noFriends =
+            var people =
                 from p in groupA
                 where p.Friends.Count() == 0
                 select p;
 
-            foreach(var p in noFriends) {
+            foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
             }
 
@@ -41,48 +41,51 @@ namespace LinQToObjects {
             HighlightedWriteLine("Assignment 2: Vsechny osoby setridene vzestupne podle jmena, ktere jsou starsi 15 let, a jejichz jmeno zacina na pismeno D nebo vetsi.");
             Console.WriteLine("Main: foreach:");
 
-            var orderedPeople =
+            people =
                 from p in groupA
                 where (p.Age > 15 && p.Name[0] >= 'D')
                 orderby p.Name
-                select new { p.Name, p.Age };
+                select p;
 
-            foreach(var p in orderedPeople) {
+            foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 3: Vsechny osoby, ktere jsou ve skupine nejstarsi, a jejichz jmeno zacina na pismeno T nebo vetsi.");
+            Console.WriteLine("Main: foreach:");
 
-            var oldestPeople =
+            people =
                 from p in groupA
                 where p.Name[0] >= 'T'
                 where p.Age == groupA.Max(x => x.Age)
-                select new { p.Name, p.Age };
+                select p;
 
-            foreach(var p in oldestPeople) {
+            foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 4: Vsechny osoby, ktere jsou starsi nez vsichni jejich pratele.");
-
-            var olderThanFriends =
+            Console.WriteLine("Main: foreach:");
+            
+            people =
                 from p in groupA
                 where (p.Friends.Count() == 0 || (p.Friends.Count() != 0 && p.Age > p.Friends.Max(x => x.Age)))
-                select new { p.Name, p.Age };
+                select p;
 
-            foreach(var p in olderThanFriends) {
+            foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 5: Vsechny osoby, ktere nemaji zadne pratele (ktere nikoho nepovazuji za sveho pritele, a zaroven ktere nikdo jiny nepovazuje za sveho pritele).");
-
-            var people =
+            Console.WriteLine("Main: foreach:");
+            
+            people =
                 from p in groupA
                 where (p.Friends.Count() == 0 && !groupA.Any(x => x.Friends.Contains(p)))
-                select new { p.Name, p.Age };
+                select p;
 
             foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
@@ -90,54 +93,59 @@ namespace LinQToObjects {
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 6: Vsechny osoby, ktere jsou necimi nejstarsimi prateli (s opakovanim).");
+            Console.WriteLine("Main: foreach:");
 
-            var oldestFriends =
+            people =
                 from p in groupA
                 from f in p.Friends
-                where (f.Age >= p.Friends.Max(x => x.Age) )
+                where (f.Age >= p.Friends.Max(x => x.Age))
                 select f;
-                
-            foreach(var p in oldestFriends) {
+
+            foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 6B: Vsechny osoby, ktere jsou necimi nejstarsimi prateli (bez opakovanim).");
+            Console.WriteLine("Main: foreach:");
 
-            oldestFriends = oldestFriends.Distinct();
+            people = people.Distinct();
 
-            foreach(var p in oldestFriends) {
+            foreach(var p in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", p.Name, p.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 7: Vsechny osoby, ktere jsou nejstarsimi prateli osoby starsi nez ony samy (s opakovanim).");
+            Console.WriteLine("Main: foreach:");
 
-            var oldestFriends2 =
+            people =
                 from p in groupA
                 from f in p.Friends
                 where (f.Age == p.Friends.Max(x => x.Age) && f.Age < p.Age)
-                select new { f.Name, f.Age };
+                select f;
 
-            foreach(var oldestFriend in oldestFriends2) {
+            foreach(var oldestFriend in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", oldestFriend.Name, oldestFriend.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 7B: Vsechny osoby, ktere jsou nejstarsimi prateli osoby starsi nez ony samy (bez opakovani).");
+            Console.WriteLine("Main: foreach:");
 
-            oldestFriends2 = oldestFriends2.Distinct();
+            people = people.Distinct();
 
-            foreach(var oldestFriend in oldestFriends2) {
+            foreach(var oldestFriend in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", oldestFriend.Name, oldestFriend.Age);
             }
 
             Console.WriteLine();
             HighlightedWriteLine("Assignment 7C: Vsechny osoby, ktere jsou nejstarsimi prateli osoby starsi nez ony samy (bez opakovani a setridene sestupne podle jmena osoby).");
+            Console.WriteLine("Main: foreach:");
 
-            oldestFriends2 = oldestFriends2.OrderByDescending(x => x.Name);
+            people = people.OrderByDescending(x => x.Name);
 
-            foreach(var oldestFriend in oldestFriends2) {
+            foreach(var oldestFriend in people) {
                 Console.WriteLine("Main: got Person(Name = \"{0}\", Age = {1})", oldestFriend.Name, oldestFriend.Age);
             }
         }
